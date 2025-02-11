@@ -1,7 +1,12 @@
 package net.bruhbrother.testingmod1;
 
 import com.mojang.logging.LogUtils;
+import net.bruhbrother.testingmod1.item.ModCreativeModeTabs;
+import net.bruhbrother.testingmod1.item.Moditems;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.CreativeModeTabRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -22,10 +27,13 @@ public class Testingmod1 {
     public static final String MOD_ID = "testingmod1";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    //lol
     public Testingmod1()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        ModCreativeModeTabs.register(modEventBus);
+
+        Moditems.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
@@ -40,7 +48,10 @@ public class Testingmod1 {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
+        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(Moditems.SAPPHIRE);
+            event.accept(Moditems.RAW_SAPPHIRE);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
